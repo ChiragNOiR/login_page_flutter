@@ -11,7 +11,7 @@ class LoginPageBody extends StatefulWidget {
 }
 
 class _LoginPageBodyState extends State<LoginPageBody> {
-  final List<String> errors = [];
+  // final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
   var obscureText = true;
   @override
@@ -86,10 +86,6 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                   }
                 },
                 decoration: InputDecoration(
-                  // prefixIcon: Icon(
-                  //   Icons.lock,
-                  //   color: Colors.purple,
-                  // ),
                   suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -108,9 +104,6 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                   labelText: "Password",
                   hintText: "Password",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
-                  // suffixIcon: SuffixIcon(
-                  //   pngIcons: "assets/icons/email.png",
-                  // ),
                 ),
               ),
             ), //components
@@ -124,7 +117,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                   return null;
                 }
               },
-            ), //components
+            ),
           ],
         ),
       ),
@@ -140,7 +133,7 @@ InputDecorationTheme inputDecorationTheme() {
     gapPadding: 10,
   );
   return InputDecorationTheme(
-      floatingLabelBehavior: FloatingLabelBehavior.always,
+      // floatingLabelBehavior: FloatingLabelBehavior.always,
       contentPadding: EdgeInsets.symmetric(horizontal: 42, vertical: 20),
       enabledBorder: outlineInputBorder,
       focusedBorder: outlineInputBorder,
