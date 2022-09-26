@@ -1,3 +1,4 @@
+import 'package:build_fourr/data/styles/app_style.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,7 +13,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('HomePage'),
+        title: Text(
+          'HomePage',
+          style: AppStyle.boldText,
+        ),
       ),
       body: Container(),
     );

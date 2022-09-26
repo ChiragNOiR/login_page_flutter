@@ -11,7 +11,7 @@ class AppStyle {
   static TextStyle boldText = GoogleFonts.roboto(
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
-    color: primaryColor,
+    color: textColor,
   );
 
   static TextStyle tText = GoogleFonts.roboto(

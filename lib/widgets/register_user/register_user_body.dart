@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:math';
 import 'package:build_fourr/data/styles/app_style.dart';
 import 'package:build_fourr/widgets/register_user/components/register_button.dart';
 import 'package:build_fourr/widgets/register_user/components/register_heading.dart';
@@ -27,20 +28,36 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
   late String? _userEmail;
 
   void _register() async {
-    final User? user = (await _auth.createUserWithEmailAndPassword(
-            email: _emailController.text, password: _passwordController.text))
-        .user;
+    if (_formKey.currentState!.validate()) {
+      final User? user = (await _auth.createUserWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text))
+          .user;
 
-    if (user != null) {
-      setState(() {
-        _success = 2;
-        _userEmail = user.email;
-      });
-    } else {
-      setState(() {
-        _success = 3;
-      });
+      if (user != null) {
+        setState(() {
+          _success = 2;
+          _userEmail = user.email;
+        });
+      } else {
+        setState(() {
+          _success = 3;
+        });
+      }
     }
+    // final User? user = (await _auth.createUserWithEmailAndPassword(
+    //         email: _emailController.text, password: _passwordController.text))
+    //     .user;
+
+    // if (user != null) {
+    //   setState(() {
+    //     _success = 2;
+    //     _userEmail = user.email;
+    //   });
+    // } else {
+    //   setState(() {
+    //     _success = 3;
+    //   });
+    // }
   }
 
   @override
@@ -181,13 +198,8 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
                 height: 30,
               ),
               RegisterButton(
-                onTap: () async {
-                  if (_formKey.currentState!.validate()) {
-                    // print("LOGIN SUCCESS!");
-                    return null;
-                  } else {
-                    _register();
-                  }
+                onTap: () {
+                  _register();
                 },
               ),
               TextButton(

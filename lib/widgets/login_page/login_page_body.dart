@@ -26,14 +26,19 @@ class _LoginPageBodyState extends State<LoginPageBody> {
   String? _userEmail = "";
 
   void _singIn() async {
-    final User user = (await _auth.signInWithEmailAndPassword(
+    final User? user = (await _auth.signInWithEmailAndPassword(
             email: _emailController.text, password: _passwordController.text))
-        .user as User;
+        .user;
 
     if (user != null) {
       setState(() {
         _success = 2;
         _userEmail = user.email;
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ));
       });
     } else {
       setState(() {
@@ -157,12 +162,6 @@ class _LoginPageBodyState extends State<LoginPageBody> {
             ),
             LoginButton(
               onTap: () async {
-                // if (_formKey.currentState!.validate()) {
-                //   // print("LOGIN SUCCESS!");
-                //   return null;
-                // } else {
-                //   _singIn();
-                // }
                 _singIn();
               },
             ),
