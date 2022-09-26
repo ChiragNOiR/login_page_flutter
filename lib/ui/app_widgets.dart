@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
       title: "Login Page",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        inputDecorationTheme: inputDecorationTheme(),
+          inputDecorationTheme: inputDecorationTheme(),
           fontFamily: GoogleFonts.roboto().fontFamily,
           scaffoldBackgroundColor: const Color(0xFFE5E5E5),
           appBarTheme: const AppBarTheme(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginButton extends StatelessWidget {
+// ignore: must_be_immutable
+class RegisterButton extends StatelessWidget {
   Function() onTap;
-  LoginButton({super.key, required this.onTap});
+  RegisterButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class LoginButton extends StatelessWidget {
             gradient: const LinearGradient(
                 colors: [Color(0xFF6569EB), Color(0xFF6569EB)])),
         child: Text(
-          'Login',
+          'Register',
           style: TextStyle(
               color: Colors.white,
               fontFamily: GoogleFonts.roboto().fontFamily,
