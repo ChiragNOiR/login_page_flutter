@@ -1,4 +1,4 @@
-import 'package:build_fourr/providers/user_provider.dart';
+import 'package:build_fourr/providers/user_auth_provider.dart';
 import 'package:build_fourr/ui/pages/login_page.dart';
 import 'package:build_fourr/widgets/login_page/login_page_body.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
+      providers: [ChangeNotifierProvider(create: (_) => UserAuthProvider())],
       child: MaterialApp(
         title: "Login Page",
         debugShowCheckedModeBanner: false,

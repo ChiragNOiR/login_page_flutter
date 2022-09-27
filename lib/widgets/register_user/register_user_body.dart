@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_const_constructors
-import 'dart:math';
 import 'package:build_fourr/data/styles/app_style.dart';
+import 'package:build_fourr/providers/user_auth_provider.dart';
 import 'package:build_fourr/widgets/register_user/components/register_button.dart';
 import 'package:build_fourr/widgets/register_user/components/register_heading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -23,41 +22,52 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
   final TextEditingController _confirmPassword = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  // late bool _success;
   int _success = 1;
+  // ignore: unused_field
   late String? _userEmail;
 
-  void _register() async {
-    if (_formKey.currentState!.validate()) {
-      final User? user = (await _auth.createUserWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text))
-          .user;
+  @override
+  void dispose() {
+    _confirmPassword.dispose();
+    _passwordController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
 
-      if (user != null) {
-        setState(() {
-          _success = 2;
-          _userEmail = user.email;
-        });
-      } else {
-        setState(() {
-          _success = 3;
-        });
-      }
+  // void _register() async {
+  //   if (_formKey.currentState!.validate()) {
+  //     final User? user = (await _auth.createUserWithEmailAndPassword(
+  //             email: _emailController.text, password: _passwordController.text))
+  //         .user;
+
+  //     if (user != null) {
+  //       setState(() {
+  //         _success = 2;
+  //         _userEmail = user.email;
+  //       });
+  //     } else {
+  //       setState(() {
+  //         _success = 3;
+  //       });
+  //     }
+  //   }
+  // }
+
+  void register() async {
+    String status = await context.read<UserAuthProvider>().register(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+
+    if (status != null) {
+      setState(() {
+        _success = 2;
+      });
+    } else {
+      setState(() {
+        _success = 3;
+      });
     }
-    // final User? user = (await _auth.createUserWithEmailAndPassword(
-    //         email: _emailController.text, password: _passwordController.text))
-    //     .user;
-
-    // if (user != null) {
-    //   setState(() {
-    //     _success = 2;
-    //     _userEmail = user.email;
-    //   });
-    // } else {
-    //   setState(() {
-    //     _success = 3;
-    //   });
-    // }
   }
 
   @override
@@ -96,7 +106,7 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
                   ),
                 ),
               ), //components
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Padding(
@@ -122,11 +132,11 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
                           });
                         },
                         child: obscureText
-                            ? Icon(
+                            ? const Icon(
                                 Icons.visibility_off,
                                 color: Colors.grey,
                               )
-                            : Icon(
+                            : const Icon(
                                 Icons.visibility,
                                 color: Colors.purple,
                               )),
@@ -136,7 +146,7 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Padding(
@@ -165,11 +175,11 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
                           });
                         },
                         child: obscureText
-                            ? Icon(
+                            ? const Icon(
                                 Icons.visibility_off,
                                 color: Colors.grey,
                               )
-                            : Icon(
+                            : const Icon(
                                 Icons.visibility,
                                 color: Colors.purple,
                               )),
@@ -179,7 +189,7 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
                   ),
                 ),
               ), //components//components
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Container(
@@ -191,15 +201,15 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
                       : (_success == 2
                           ? 'Successfully Registered'
                           : 'Registration Failed'),
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               RegisterButton(
                 onTap: () {
-                  _register();
+                  register();
                 },
               ),
               TextButton(
@@ -228,7 +238,7 @@ InputDecorationTheme inputDecorationTheme() {
   );
   return InputDecorationTheme(
       // floatingLabelBehavior: FloatingLabelBehavior.always,
-      contentPadding: EdgeInsets.symmetric(horizontal: 42, vertical: 20),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 42, vertical: 20),
       enabledBorder: outlineInputBorder,
       focusedBorder: outlineInputBorder,
       border: outlineInputBorder);

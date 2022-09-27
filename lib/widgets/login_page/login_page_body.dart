@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:build_fourr/data/styles/app_style.dart';
+import 'package:build_fourr/providers/user_auth_provider.dart';
 import 'package:build_fourr/ui/pages/home_page.dart';
 import 'package:build_fourr/widgets/login_page/components_login/heading_design.dart';
 import 'package:build_fourr/widgets/login_page/components_login/login_button.dart';
 import 'package:build_fourr/widgets/register_user/register_user_body.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -23,22 +25,47 @@ class _LoginPageBodyState extends State<LoginPageBody> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   int _success = 1;
+  // ignore: unused_field
   String? _userEmail = "";
 
-  void _singIn() async {
-    final User? user = (await _auth.signInWithEmailAndPassword(
-            email: _emailController.text, password: _passwordController.text))
-        .user;
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
 
-    if (user != null) {
+  // void _singIn() async {
+  //   final User? user = (await _auth.signInWithEmailAndPassword(
+  //           email: _emailController.text, password: _passwordController.text))
+  //       .user;
+
+  //   if (user != null) {
+  //     setState(() {
+  //       _success = 2;
+  //       _userEmail = user.email;
+  //       Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (context) => HomePage(),
+  //           ));
+  //     });
+  //   } else {
+  //     setState(() {
+  //       _success = 3;
+  //     });
+  //   }
+  // }
+  void signIn() async {
+    String status = await context.read<UserAuthProvider>().register(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+    if (status != null) {
       setState(() {
         _success = 2;
-        _userEmail = user.email;
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
       });
     } else {
       setState(() {
@@ -59,26 +86,6 @@ class _LoginPageBodyState extends State<LoginPageBody> {
             const SizedBox(
               height: 50,
             ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 15),
-            //   child: TextFormField(
-            //     validator: (value) {
-            //       if (value == null || value.isEmpty) {
-            //         return "Please enter your Full Name";
-            //       } else {
-            //         return null;
-            //       }
-            //     },
-            //     decoration: const InputDecoration(
-            //       labelText: "Name",
-            //       hintText: "Full Name",
-            //       floatingLabelBehavior: FloatingLabelBehavior.always,
-            //     ),
-            //   ),
-            // ), //components
-            // const SizedBox(
-            //   height: 20,
-            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextFormField(
@@ -110,16 +117,16 @@ class _LoginPageBodyState extends State<LoginPageBody> {
               child: TextFormField(
                 controller: _passwordController,
                 obscureText: obscureText,
-                // validator: (value) {
-                //   if (value != null && value.isEmpty) {
-                //     return 'Please enter your Password';
-                //   } else if (value!.isEmpty ||
-                //       !RegExp(r'.{6,}$').hasMatch(value)) {
-                //     return 'Password must be at least 6 digit long.';
-                //   } else {
-                //     return null;
-                //   }
-                // },
+                validator: (value) {
+                  if (value != null && value.isEmpty) {
+                    return 'Please enter your Password';
+                  } else if (value!.isEmpty ||
+                      !RegExp(r'.{6,}$').hasMatch(value)) {
+                    return 'Password must be at least 6 digit long.';
+                  } else {
+                    return null;
+                  }
+                },
                 decoration: InputDecoration(
                   suffixIcon: GestureDetector(
                       onTap: () {
@@ -162,7 +169,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
             ),
             LoginButton(
               onTap: () async {
-                _singIn();
+                signIn();
               },
             ),
             TextButton(
