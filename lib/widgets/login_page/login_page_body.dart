@@ -5,11 +5,9 @@ import 'package:build_fourr/ui/pages/home_page.dart';
 import 'package:build_fourr/widgets/login_page/components_login/heading_design.dart';
 import 'package:build_fourr/widgets/login_page/components_login/login_button.dart';
 import 'package:build_fourr/widgets/register_user/register_user_body.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-
-final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class LoginPageBody extends StatefulWidget {
   const LoginPageBody({super.key});
@@ -24,9 +22,6 @@ class _LoginPageBodyState extends State<LoginPageBody> {
   var obscureText = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  int _success = 1;
-  // ignore: unused_field
-  String? _userEmail = "";
 
   @override
   void dispose() {
@@ -35,42 +30,18 @@ class _LoginPageBodyState extends State<LoginPageBody> {
     super.dispose();
   }
 
-  // void _singIn() async {
-  //   final User? user = (await _auth.signInWithEmailAndPassword(
-  //           email: _emailController.text, password: _passwordController.text))
-  //       .user;
-
-  //   if (user != null) {
-  //     setState(() {
-  //       _success = 2;
-  //       _userEmail = user.email;
-  //       Navigator.pushReplacement(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => HomePage(),
-  //           ));
-  //     });
-  //   } else {
-  //     setState(() {
-  //       _success = 3;
-  //     });
-  //   }
-  // }
   void signIn() async {
-    String status = await context.read<UserAuthProvider>().register(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
-    if (status != null) {
-      setState(() {
-        _success = 2;
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
-      });
-    } else {
-      setState(() {
-        _success = 3;
-      });
+    if (_formKey.currentState!.validate()) {
+      String status = await context.read<UserAuthProvider>().signIn(
+            email: _emailController.text,
+            password: _passwordController.text,
+          );
+      Fluttertoast.showToast(msg: status, toastLength: Toast.LENGTH_SHORT);
+      if (status == 'Logged In Successfully') {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => HomePage()));
+      }
     }
   }
 
@@ -151,18 +122,6 @@ class _LoginPageBodyState extends State<LoginPageBody> {
             ), //components
             SizedBox(
               height: 30,
-            ),
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                _success == 1
-                    ? ''
-                    : (_success == 2
-                        ? 'Successfully signed in'
-                        : 'Sign in failed'),
-                style: TextStyle(color: Colors.red),
-              ),
             ),
             SizedBox(
               height: 30,

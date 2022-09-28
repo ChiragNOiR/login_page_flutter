@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,9 +15,10 @@ class FireService {
           .user;
       return 'Registered';
     } on FirebaseAuthException catch (e) {
+      log(e.code.toString());
       if (e.code == 'weak-password') {
         return 'Password is too weak';
-      } else if (e.code == 'email already registered') {
+      } else if (e.code == 'email-already-in-use') {
         return 'The email you are trying to register is already registered';
       }
       return 'We are unable to process at the moment';
@@ -31,9 +34,10 @@ class FireService {
           .user;
       return 'Logged In Successfully';
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'No user is found') {
+      log(e.code.toString());
+      if (e.code == 'user-not-found') {
         return 'No user is found with the email. Please register first';
-      } else if (e.code == 'wrong password' || e.code == 'invalid email') {
+      } else if (e.code == 'wrong-password' || e.code == 'invalid-email') {
         return 'The password or the email that is provided doesn\'t match';
       }
       return 'We are unable to process at the moment';

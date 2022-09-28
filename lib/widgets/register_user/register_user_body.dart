@@ -2,11 +2,9 @@ import 'package:build_fourr/data/styles/app_style.dart';
 import 'package:build_fourr/providers/user_auth_provider.dart';
 import 'package:build_fourr/widgets/register_user/components/register_button.dart';
 import 'package:build_fourr/widgets/register_user/components/register_heading.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-
-final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class RegisterPageBody extends StatefulWidget {
   const RegisterPageBody({super.key});
@@ -22,9 +20,6 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
   final TextEditingController _confirmPassword = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  int _success = 1;
-  // ignore: unused_field
-  late String? _userEmail;
 
   @override
   void dispose() {
@@ -34,40 +29,12 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
     super.dispose();
   }
 
-  // void _register() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     final User? user = (await _auth.createUserWithEmailAndPassword(
-  //             email: _emailController.text, password: _passwordController.text))
-  //         .user;
-
-  //     if (user != null) {
-  //       setState(() {
-  //         _success = 2;
-  //         _userEmail = user.email;
-  //       });
-  //     } else {
-  //       setState(() {
-  //         _success = 3;
-  //       });
-  //     }
-  //   }
-  // }
-
   void register() async {
     String status = await context.read<UserAuthProvider>().register(
           email: _emailController.text,
           password: _passwordController.text,
         );
-
-    if (status != null) {
-      setState(() {
-        _success = 2;
-      });
-    } else {
-      setState(() {
-        _success = 3;
-      });
-    }
+    Fluttertoast.showToast(msg: status, toastLength: Toast.LENGTH_SHORT);
   }
 
   @override
@@ -192,24 +159,14 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
               const SizedBox(
                 height: 30,
               ),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  _success == 1
-                      ? ''
-                      : (_success == 2
-                          ? 'Successfully Registered'
-                          : 'Registration Failed'),
-                  style: const TextStyle(color: Colors.red),
-                ),
-              ),
               const SizedBox(
                 height: 30,
               ),
               RegisterButton(
                 onTap: () {
-                  register();
+                  if (_formKey.currentState!.validate()) {
+                    register();
+                  }
                 },
               ),
               TextButton(
